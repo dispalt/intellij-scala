@@ -118,18 +118,17 @@ class ScalaResolveResult(val element: PsiNamedElement,
       implicitParameterType = implicitParameterType, implicitParameters = implicitParameters,
       implicitReason = implicitReason, implicitSearchState = implicitSearchState, unresolvedTypeParameters = unresolvedTypeParameters)
 
-  //In valid program we should not have two resolve results with the same element but different substitutor,
-  // so factor by element
   override def equals(other: Any): Boolean = other match {
     case rr: ScalaResolveResult =>
-      if (element ne rr.element) return false
-      if (renamed != rr.renamed) return false
-      if (implicitFunction != rr.implicitFunction) return false
-      innerResolveResult == rr.innerResolveResult
+      (element eq rr.element) &&
+        renamed == rr.renamed &&
+        implicitFunction == rr.implicitFunction &&
+        innerResolveResult == rr.innerResolveResult &&
+        substitutor == rr.substitutor
     case _ => false
   }
 
-  override def hashCode: Int = Objects.hash(element, innerResolveResult, renamed, implicitFunction)
+  override def hashCode: Int = Objects.hash(element, innerResolveResult, renamed, implicitFunction, substitutor)
 
   override def toString: String =  {
     val name = element match {

@@ -254,12 +254,12 @@ abstract class ScTemplateDefinitionImpl[T <: ScTemplateDefinition] private[impl]
     // Process selftype reference
     selfTypeElement match {
       case Some(se) if se.name != "_" => if (!processor.execute(se, oldState)) return false
-      case _ =>
+      case _                          =>
     }
 
     val fromType =
       if (ScalaPsiUtil.isPlaceTdAncestor(this, place)) ScThisType(this)
-      else ScalaType.designator(this)
+      else                                             ScalaType.designator(this)
 
     val state = oldState.withFromType(fromType)
 

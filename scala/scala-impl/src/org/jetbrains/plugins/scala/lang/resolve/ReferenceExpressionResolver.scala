@@ -228,19 +228,21 @@ class ReferenceExpressionResolver(implicit projectContext: ProjectContext) {
       def treeWalkUp(place: PsiElement, lastParent: PsiElement) {
         if (place == null) return
         if (!place.processDeclarations(processor, ScalaResolveState.empty, lastParent, ref)) return
+
         place match {
           case _: ScTemplateBody | _: ScExtendsBlock => //template body and inherited members are at the same level
-          case _ => if (!processor.changedLevel) return
+          case _                                     => if (!processor.changedLevel) return
         }
+
         treeWalkUp(place.getContext, place)
       }
 
       val context = ref.getContext
       val contextElement = (context, processor) match {
         case (x: ScAssignment, _) if x.leftExpression == ref => Some(context)
-        case (_, _: DependencyProcessor) => None
-        case (_, _: CompletionProcessor) => Some(ref)
-        case _ => None
+        case (_, _: DependencyProcessor)                     => None
+        case (_, _: CompletionProcessor)                     => Some(ref)
+        case _                                               => None
       }
 
       contextElement.foreach(processAssignment(_, processor))

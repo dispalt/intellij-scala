@@ -232,7 +232,7 @@ class ImplicitCollector(place: PsiElement,
 
       if (isImplicit(namedElement) && isAccessible(namedElement, getPlace)) {
         addResult(new ScalaResolveResult(namedElement, state.substitutorWithThisType,
-          importsUsed =  state.importsUsed,
+          importsUsed = state.importsUsed,
           implicitSearchState = Some(collectorState)))
       }
 
