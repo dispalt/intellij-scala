@@ -40,7 +40,7 @@ trait SimpleResolveTestBase {
     else null
   }
 
-  protected def doResolveTest(sources: (String, String)*): Unit = {
+  protected def setupResolveTest(sources: (String, String)*): (ScReference, PsiElement) = {
     var src: ScReference = null
     var tgt: PsiElement = null
 
@@ -61,6 +61,11 @@ trait SimpleResolveTestBase {
     }
 
     Assert.assertNotNull("Failed to locate source element", src)
+    (src, tgt)
+  }
+
+  protected def doResolveTest(sources: (String, String)*): Unit = {
+    val (src, tgt) = setupResolveTest(sources: _*)
     val result = src.resolve()
     if (shouldPass) {
       Assert.assertNotNull(s"Failed to resolve element - '${src.getText}'", result)
